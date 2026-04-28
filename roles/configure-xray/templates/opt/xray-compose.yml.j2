@@ -1,0 +1,11 @@
+services:
+  xray:
+    image: teddysun/xray:latest
+    container_name: xray
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - /etc/xray/config.json:/etc/xray/config.json:ro
+      - /etc/xray/geoip.dat:/usr/local/share/xray/geoip.dat:ro
+      - /etc/xray/geosite.dat:/usr/local/share/xray/geosite.dat:ro

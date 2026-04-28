@@ -1,0 +1,9 @@
+---
+
+timezone: "UTC"
+apt_basics:
+  - "ca-certificates"
+  - "curl"
+  - "gnupg"
+  - "unzip"
+  - "git"

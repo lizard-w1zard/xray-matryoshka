@@ -1,0 +1,41 @@
+---
+
+- name: Ensure Xray directory exists
+  ansible.builtin.file:
+    path: "/etc/xray"
+    state: directory
+    mode: "0755"
+
+- name: Deploy Xray config based on node role
+  ansible.builtin.template:
+    src: "etc/xray/config_{{ node_role }}.json.j2"
+    dest: "/etc/xray/config.json"
+    mode: "0644"
+  notify: Restart xray
+
+- name: Download GeoIP and GeoSite databases
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "/etc/xray/{{ item.name }}"
+    mode: '0644'
+  loop:
+    - { url: 'https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat', name: 'geoip.dat' }
+    - { url: 'https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat', name: 'geosite.dat' }
+  notify: Restart xray
+
+- name: Copy docker-compose for Xray
+  ansible.builtin.template:
+    src: opt/xray-compose.yml.j2
+    dest: /opt/xray-compose.yml
+
+- name: Start Xray via Docker Compose V2
+  community.docker.docker_compose_v2:
+    project_src: /opt
+    files:
+      - xray-compose.yml
+    state: present
+
+- name: Print connection link
+  ansible.builtin.debug:
+    msg: "vless://{{ xray_entry_uuid }}@{{ hostvars['entry']['ansible_host'] }}:443?security=reality&encryption=none&pbk={{ xray_entry_public_key }}&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni={{ xray_entry_dest }}&sid={{ xray_entry_short_id }}#Matryoshka"
+  when: node_role == 'entry'

@@ -1,0 +1,10 @@
+---
+
+- name: Render configuration file
+  ansible.builtin.template:
+    src: "99-bbr.conf.j2"
+    dest: "/etc/sysctl.d/99-bbr.conf.j2"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  notify: Reload sysctl
