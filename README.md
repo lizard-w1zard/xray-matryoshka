@@ -1,16 +1,25 @@
 # xray-matryoshka
 
-Automated Ansible deployment for a multi-node Xray proxy cascade (VLESS+REALITY). Sets up a secure Entry-Transit-Exit routing scheme to protect internal traffic flow. No TLS certificates or domains required. Perfect for maintaining stable and private self-hosted infrastructure.
+Automated Ansible deployment for a multi-node Xray proxy cascade (VLESS+REALITY). 
+
+Sets up a secure Entry-Transit-Exit routing scheme to protect internal traffic flow.
+
+ No TLS certificates or domains required. Perfect for maintaining stable and private self-hosted infrastructure.
 
 📌 **About**
 
-This project automates the deployment of a 3-node network topology (Entry ➔ Transit ➔ Exit) using [Xray-core](https://github.com/XTLS/Xray-core) under the hood. It leverages the REALITY protocol to obfuscate server-to-server communication, ensuring high resilience and data privacy across your infrastructure without the need for external domains.
+This project automates the deployment of a 3-node network topology (Entry ➔ Transit ➔ Exit) using [Xray-core](https://github.com/XTLS/Xray-core) under the hood. 
+
+It leverages the REALITY protocol to obfuscate server-to-server communication, ensuring high resilience and data privacy across your infrastructure without the need for external domains.
 
 ✨ **Features**
 
 ✅ **3-Node Cascaded Routing:** Segmented traffic flow.
+
 ✅ **Xray (VLESS + REALITY):** Secure, obfuscated internal tunnels.
+
 ✅ **Fully Automated:** Deploy to multiple servers in minutes via Ansible.
+
 ✅ **Domainless:** No TLS certificates or registered domains required.
 
 📦 **Requirements**
