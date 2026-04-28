@@ -1,0 +1,44 @@
+---
+
+# ==========================================
+# SNI / Dest Domains for REALITY masking
+# These domains must support TLS 1.3 and HTTP/2
+# ==========================================
+xray_entry_dest: "www.rambler.ru"       # Masking domain for the Entry node (e.g., local RU traffic)
+xray_transit_dest: "www.cloudflare.com" # Masking domain for the Transit node (e.g., DE)
+xray_exit_dest: "www.netflix.com"       # Masking domain for the Exit node (e.g., AM)
+
+# ==========================================
+# Client UUIDs for VLESS authentication
+# Generate using `uuidgen` command
+# ==========================================
+xray_entry_uuid: badb5131-9798-46bc-be7a-152905598a59   # UUID for User -> Entry connection
+xray_transit_uuid: 8500c2ce-645d-4731-baba-65c4bddb1d66 # UUID for Entry -> Transit connection
+xray_exit_uuid: 804fb5a7-1027-4dd4-96e2-faa3b35ac068    # UUID for Transit -> Exit connection
+
+# ==========================================
+# REALITY Key Pairs (x25519)
+# Generate using `xray x25519` command
+# ==========================================
+# Keys for the first hop (Entry -> Transit segment)
+xray_entry_private_key: ZZq4OAdut0Rp3wd09LhUMMwNwfeQx3LtiTX6p9jD4JF
+xray_entry_public_key: a9nBay8Zqs2C0YLNqs1a9yLmf6qzKgiiRbPXMpFpC8H
+
+# Keys for the second hop (Transit -> Exit segment)
+xray_exit_private_key: HR096EOwQoyoErtHo0UccvNHHH8ZYVyGSY03WK6aURF
+xray_exit_public_key: tj7bwWQc4tQwc5iUM0yFayeOiPmkD2VvPNK9MP7Qqgm
+
+# ==========================================
+# REALITY Short IDs
+# Generate using `openssl rand -hex 8` command
+# ==========================================
+xray_entry_short_id: ce3b334702d898ff # Short ID for the first hop
+xray_exit_short_id: a4c0add371567212  # Short ID for the second hop
+
+# ==========================================
+# Server IP Addresses
+# Define the actual IP addresses of your nodes here
+# ==========================================
+host_entry: "192.168.1.100"   # IP address of the Entry node
+host_transit: "192.168.1.101" # IP address of the Transit node
+host_exit: "192.168.1.102"    # IP address of the Exit node
