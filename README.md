@@ -38,18 +38,21 @@ Before running the playbook, your control machine's public SSH key must be added
 🚀 **Quick Start**
 
 **1. Clone the repository**
+
 ```bash
 git clone https://github.com/your-username/xray-matryoshka.git
 cd xray-matryoshka
 ```
 
 **2. Configure Variables**
+
 Copy the example variables file to the `group_vars` directory:
 ```bash
 cp examples/xray.yml group_vars/matryoshka/xray.yml
 ```
 
 **3. Generate Cryptographic Keys**
+
 You need to generate unique keys and IDs. You can do this on any machine with Docker or natively installed tools.
 
 *Generate 3 UUIDs (for Entry, Transit, and Exit nodes):*
@@ -71,12 +74,15 @@ openssl rand -hex 8
 ```
 
 **4. Apply Your Data**
+
 Open `group_vars/matryoshka/xray.yml` and carefully fill in the variables with your newly generated UUIDs, Keys, and SIDs.
 
 **5. Apply the Inventory**
+
 Open `inventory.ini` and carefully fill in `ansible_host` with your ip addresses.
 
 **6. Run the Playbook**
+
 Deploy the infrastructure by running:
 ```bash
 ansible-playbook -i inventory.ini matryoshka.yml
