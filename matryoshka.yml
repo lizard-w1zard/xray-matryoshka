@@ -1,7 +1,7 @@
 ---
 
 - name: Deploy Xray Servers
-  hosts: servers
+  hosts: matryoshka
   remote_user: root
   gather_facts: true
   roles:

@@ -34,11 +34,3 @@ xray_exit_public_key: tj7bwWQc4tQwc5iUM0yFayeOiPmkD2VvPNK9MP7Qqgm
 # ==========================================
 xray_entry_short_id: ce3b334702d898ff # Short ID for the first hop
 xray_exit_short_id: a4c0add371567212  # Short ID for the second hop
-
-# ==========================================
-# Server IP Addresses
-# Define the actual IP addresses of your nodes here
-# ==========================================
-host_entry: "192.168.1.100"   # IP address of the Entry node
-host_transit: "192.168.1.101" # IP address of the Transit node
-host_exit: "192.168.1.102"    # IP address of the Exit node

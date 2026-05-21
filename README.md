@@ -73,7 +73,10 @@ openssl rand -hex 8
 **4. Apply Your Data**
 Open `group_vars/matryoshka/xray.yml` and carefully fill in the variables with your newly generated UUIDs, Keys, and SIDs.
 
-**5. Run the Playbook**
+**5. Apply the Inventory**
+Open `inventory.ini` and carefully fill in `ansible_host` with your ip addresses.
+
+**6. Run the Playbook**
 Deploy the infrastructure by running:
 ```bash
 ansible-playbook -i inventory.ini matryoshka.yml
