@@ -1,0 +1,4 @@
+[matryoshka]
+entry    ansible_host=10.10.10.10    node_role=entry
+transit  ansible_host=11.11.11.11  node_role=transit
+exit     ansible_host=12.12.12.12     node_role=exit

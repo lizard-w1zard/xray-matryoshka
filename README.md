@@ -79,6 +79,12 @@ Open `group_vars/matryoshka/xray.yml` and carefully fill in the variables with y
 
 **5. Apply the Inventory**
 
+Copy the example inventory file to the root directory:
+
+```bash
+cp inventory.ini.example inventory.ini
+```
+
 Open `inventory.ini` and carefully fill in `ansible_host` with your ip addresses.
 
 **6. Run the Playbook**
