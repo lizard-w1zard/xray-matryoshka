@@ -6,13 +6,13 @@ Sets up a secure Entry-Transit-Exit routing scheme to protect internal traffic f
 
  No TLS certificates or domains required. Perfect for maintaining stable and private self-hosted infrastructure.
 
-📌 **About**
+## 📌 **About**
 
 This project automates the deployment of a 3-node network topology (Entry ➔ Transit ➔ Exit) using [Xray-core](https://github.com/XTLS/Xray-core) under the hood. 
 
 It leverages the REALITY protocol to obfuscate server-to-server communication, ensuring high resilience and data privacy across your infrastructure without the need for external domains.
 
-✨ **Features**
+## ✨ **Features**
 
 ✅ **3-Node Cascaded Routing:** Segmented traffic flow.
 
@@ -22,20 +22,20 @@ It leverages the REALITY protocol to obfuscate server-to-server communication, e
 
 ✅ **Domainless:** No TLS certificates or registered domains required.
 
-📦 **Requirements**
+## 📦 **Requirements**
 
 * Control machine with **Ansible** installed.
 * 3 target servers running **Debian/Ubuntu**.
 * **Root SSH access** to all target servers.
 
-🔑 **Prerequisite: SSH Key Setup**
+## 🔑 **Prerequisite: SSH Key Setup**
 
 Before running the playbook, your control machine's public SSH key must be added to the `~/.ssh/authorized_keys` file of the `root` user on all three target servers. 
 
 > *If you are new to SSH keys, follow this simple public guide:*
 > [**How to Set Up SSH Keys (DigitalOcean)**](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2)
 
-🚀 **Quick Start**
+## 🚀 **Quick Start**
 
 **1. Clone the repository**
 
@@ -94,10 +94,10 @@ Deploy the infrastructure by running:
 ansible-playbook -i inventory.ini matryoshka.yml
 ```
 
-📜 **License**
+## 📜 **License**
 
 MIT — see [LICENSE](LICENSE)
 
-🛡️ **Disclaimer**
+## 🛡️ **Disclaimer**
 
 This project is provided for educational, testing, and private infrastructure management purposes only. Use at your own risk. Respect the terms of service of your hosting providers and the laws of your jurisdiction.
