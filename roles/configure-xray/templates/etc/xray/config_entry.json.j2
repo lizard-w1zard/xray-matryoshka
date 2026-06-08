@@ -56,7 +56,8 @@
         "network": "tcp",
         "security": "reality",
         "realitySettings": {
-          "serverName": "{{ xray_exit_dest }}",
+          "fingerprint": "chrome",
+          "serverName": "{{ xray_transit_dest }}",
           "publicKey": "{{ xray_entry_public_key }}",
           "shortId": "{{ xray_entry_short_id }}",
           "spiderX": "/"
