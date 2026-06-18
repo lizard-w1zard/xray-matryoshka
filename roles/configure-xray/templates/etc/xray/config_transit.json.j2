@@ -5,17 +5,20 @@
       "port": 443,
       "protocol": "vless",
       "settings": {
-        "clients": [{ "id": "{{ xray_transit_uuid }}", "flow": "xtls-rprx-vision" }],
+        "clients": [{ "id": "{{ xray_transit_uuid }}", "flow": "" }],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "dest": "{{ xray_transit_dest }}:443",
           "serverNames": ["{{ xray_transit_dest }}"],
           "privateKey": "{{ xray_entry_private_key }}",
           "shortIds": ["{{ xray_entry_short_id }}"]
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
         }
       }
     }
@@ -33,14 +36,14 @@
               {
                 "id": "{{ xray_exit_uuid }}",
                 "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "flow": ""
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
@@ -48,6 +51,9 @@
           "publicKey": "{{ xray_exit_public_key }}",
           "shortId": "{{ xray_exit_short_id }}",
           "spiderX": "/"
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
         }
       }
     }

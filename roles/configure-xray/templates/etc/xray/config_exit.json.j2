@@ -5,17 +5,20 @@
       "port": 443,
       "protocol": "vless",
       "settings": {
-        "clients": [{ "id": "{{ xray_exit_uuid }}", "flow": "xtls-rprx-vision" }],
+        "clients": [{ "id": "{{ xray_exit_uuid }}", "flow": "" }],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "dest": "{{ xray_exit_dest }}:443",
           "serverNames": ["{{ xray_exit_dest }}"],
           "privateKey": "{{ xray_exit_private_key }}",
           "shortIds": ["{{ xray_exit_short_id }}"]
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
         }
       }
     }

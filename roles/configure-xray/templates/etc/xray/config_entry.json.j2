@@ -11,13 +11,13 @@
         "clients": [
           {
             "id": "{{ xray_entry_uuid }}",
-            "flow": "xtls-rprx-vision"
+            "flow": ""
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "show": false,
@@ -25,6 +25,9 @@
           "serverNames": ["{{ xray_entry_dest }}"],
           "privateKey": "{{ xray_entry_private_key }}",
           "shortIds": ["{{ xray_entry_short_id }}"]
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
         }
       },
       "sniffing": {
@@ -46,14 +49,14 @@
               {
                 "id": "{{ xray_transit_uuid }}",
                 "encryption": "none",
-                "flow": "xtls-rprx-vision"
+                "flow": ""
               }
             ]
           }
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
@@ -61,6 +64,9 @@
           "publicKey": "{{ xray_entry_public_key }}",
           "shortId": "{{ xray_entry_short_id }}",
           "spiderX": "/"
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
         }
       }
     },

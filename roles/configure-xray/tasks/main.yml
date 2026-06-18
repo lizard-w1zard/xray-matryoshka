@@ -37,5 +37,5 @@
 
 - name: Print connection link
   ansible.builtin.debug:
-    msg: "vless://{{ xray_entry_uuid }}@{{ hostvars['entry']['ansible_host'] }}:443?security=reality&encryption=none&pbk={{ xray_entry_public_key }}&headerType=none&fp=chrome&type=tcp&flow=xtls-rprx-vision&sni={{ xray_entry_dest }}&sid={{ xray_entry_short_id }}#Matryoshka"
+    msg: "vless://{{ xray_entry_uuid }}@{{ hostvars['entry']['ansible_host'] }}:443?encryption=none&type=grpc&serviceName=grpc&security=reality&pbk={{ xray_entry_public_key }}&fp=chrome&sni={{ xray_entry_dest }}&sid={{ xray_entry_short_id }}#Matryoshka"
   when: node_role == 'entry'
