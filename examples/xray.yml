@@ -1,36 +1,45 @@
 ---
 
 # ==========================================
-# SNI / Dest Domains for REALITY masking
-# These domains must support TLS 1.3 and HTTP/2
+# Entry Node IP
 # ==========================================
-xray_entry_dest: "www.rambler.ru"       # Masking domain for the Entry node (e.g., local RU traffic)
-xray_transit_dest: "www.cloudflare.com" # Masking domain for the Transit node (e.g., DE)
-xray_exit_dest: "www.netflix.com"       # Masking domain for the Exit node (e.g., AM)
+xray_entry_host: "1.2.3.4"   # Public IP of your Entry node
+
+# ==========================================
+# SNI / Dest Domains for REALITY masking
+# Must support TLS 1.3 and HTTP/2
+# ==========================================
+xray_entry_dest: "www.rambler.ru"       # Masking domain for Entry node (RU, low latency)
+xray_transit_dest: "www.cloudflare.com" # Masking domain for Transit node
+xray_exit_dest: "www.netflix.com"       # Masking domain for Exit node
 
 # ==========================================
 # Client UUIDs for VLESS authentication
-# Generate using `uuidgen` command
+# Generate: uuidgen
 # ==========================================
-xray_entry_uuid: badb5131-9798-46bc-be7a-152905598a59   # UUID for User -> Entry connection
-xray_transit_uuid: 8500c2ce-645d-4731-baba-65c4bddb1d66 # UUID for Entry -> Transit connection
-xray_exit_uuid: 804fb5a7-1027-4dd4-96e2-faa3b35ac068    # UUID for Transit -> Exit connection
+xray_entry_uuid: badb5131-9798-46bc-be7a-152905598a59
+xray_transit_uuid: 8500c2ce-645d-4731-baba-65c4bddb1d66
+xray_exit_uuid: 804fb5a7-1027-4dd4-96e2-faa3b35ac068
 
 # ==========================================
 # REALITY Key Pairs (x25519)
-# Generate using `xray x25519` command
+# Generate: docker run --rm teddysun/xray xray x25519
 # ==========================================
-# Keys for the first hop (Entry -> Transit segment)
 xray_entry_private_key: ZZq4OAdut0Rp3wd09LhUMMwNwfeQx3LtiTX6p9jD4JF
 xray_entry_public_key: a9nBay8Zqs2C0YLNqs1a9yLmf6qzKgiiRbPXMpFpC8H
 
-# Keys for the second hop (Transit -> Exit segment)
 xray_exit_private_key: HR096EOwQoyoErtHo0UccvNHHH8ZYVyGSY03WK6aURF
 xray_exit_public_key: tj7bwWQc4tQwc5iUM0yFayeOiPmkD2VvPNK9MP7Qqgm
 
 # ==========================================
 # REALITY Short IDs
-# Generate using `openssl rand -hex 8` command
+# Generate: openssl rand -hex 8
 # ==========================================
-xray_entry_short_id: ce3b334702d898ff # Short ID for the first hop
-xray_exit_short_id: a4c0add371567212  # Short ID for the second hop
+xray_entry_short_id: ce3b334702d898ff
+xray_exit_short_id: a4c0add371567212
+
+# ==========================================
+# Client subscription link (auto-assembled from variables above)
+# Pushed to GitHub Gist on every deploy — do not edit manually
+# ==========================================
+xray_entry_vless_link: "vless://{{ xray_entry_uuid }}@{{ xray_entry_host }}:443?encryption=none&type=grpc&serviceName=grpc&security=reality&pbk={{ xray_entry_public_key }}&fp=chrome&sni={{ xray_entry_dest }}&sid={{ xray_entry_short_id }}#Matryoshka"

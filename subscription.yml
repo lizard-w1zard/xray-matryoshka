@@ -1,0 +1,7 @@
+---
+
+- name: Update subscription on GitHub Gist
+  hosts: entry
+  gather_facts: false
+  roles:
+    - { role: update-subscription }

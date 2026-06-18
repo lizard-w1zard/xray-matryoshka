@@ -1,0 +1,18 @@
+---
+
+# ==========================================
+# GitHub Gist Subscription
+# This file is gitignored — never commit real values
+# ==========================================
+
+# GitHub Personal Access Token with `gist` scope only
+# Generate: GitHub → Settings → Developer settings → Personal access tokens → Fine-grained
+github_gist_token: "github_pat_XXXXXXXXXXXXXXXXXXXXXXXX"
+
+# Gist ID from the URL: gist.github.com/{user}/{ID}
+# Create a secret gist manually at gist.github.com with a file named sub.txt
+# Generate: openssl rand -hex 32 (use as a throwaway initial content)
+github_gist_id: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
+
+# Your GitHub username
+github_gist_user: "your-username"

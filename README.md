@@ -1,41 +1,44 @@
 # xray-matryoshka
 
-Automated Ansible deployment for a multi-node Xray proxy cascade (VLESS+REALITY). 
+Automated Ansible deployment for a multi-node Xray proxy cascade (VLESS+REALITY).
 
-Sets up a secure Entry-Transit-Exit routing scheme to protect internal traffic flow.
+Sets up a secure Entry→Transit→Exit routing scheme with gRPC transport to protect against DPI-based connection counting.
 
- No TLS certificates or domains required. Perfect for maintaining stable and private self-hosted infrastructure.
+No TLS certificates or domains required. Perfect for maintaining stable and private self-hosted infrastructure.
 
-## 📌 **About**
+## 📌 About
 
-This project automates the deployment of a 3-node network topology (Entry ➔ Transit ➔ Exit) using [Xray-core](https://github.com/XTLS/Xray-core) under the hood. 
+This project automates the deployment of a 3-node network topology (Entry ➔ Transit ➔ Exit) using [Xray-core](https://github.com/XTLS/Xray-core) under the hood.
 
 It leverages the REALITY protocol to obfuscate server-to-server communication, ensuring high resilience and data privacy across your infrastructure without the need for external domains.
 
-## ✨ **Features**
+## ✨ Features
 
-✅ **3-Node Cascaded Routing:** Segmented traffic flow.
+✅ **3-Node Cascaded Routing:** Entry → Transit → Exit segmented traffic flow.
 
-✅ **Xray (VLESS + REALITY):** Secure, obfuscated internal tunnels.
+✅ **Xray (VLESS + REALITY + gRPC):** Secure, obfuscated tunnels with HTTP/2 multiplexing — one TLS handshake per session instead of one per browser connection.
 
 ✅ **Fully Automated:** Deploy to multiple servers in minutes via Ansible.
 
 ✅ **Domainless:** No TLS certificates or registered domains required.
 
-## 📦 **Requirements**
+✅ **GitHub Gist Subscription:** Client connection links are automatically pushed to a secret GitHub Gist on every deploy. Add the URL once to any client — updates propagate automatically.
 
-* Control machine with **Ansible** installed.
-* 3 target servers running **Debian/Ubuntu**.
-* **Root SSH access** to all target servers.
+## 📦 Requirements
 
-## 🔑 **Prerequisite: SSH Key Setup**
+- Control machine with **Ansible** installed.
+- 3 target servers running **Debian/Ubuntu**.
+- **Root SSH access** to all target servers.
+- **GitHub account** for subscription delivery.
 
-Before running the playbook, your control machine's public SSH key must be added to the `~/.ssh/authorized_keys` file of the `root` user on all three target servers. 
+## 🔑 Prerequisite: SSH Key Setup
+
+Before running the playbook, your control machine's public SSH key must be added to the `~/.ssh/authorized_keys` file of the `root` user on all three target servers.
 
 > *If you are new to SSH keys, follow this simple public guide:*
 > [**How to Set Up SSH Keys (DigitalOcean)**](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2)
 
-## 🚀 **Quick Start**
+## 🚀 Quick Start
 
 **1. Clone the repository**
 
@@ -44,60 +47,81 @@ git clone https://github.com/your-username/xray-matryoshka.git
 cd xray-matryoshka
 ```
 
-**2. Configure Variables**
+**2. Configure Xray variables**
 
-Copy the example variables file to the `group_vars` directory:
 ```bash
 cp examples/xray.yml group_vars/matryoshka/xray.yml
 ```
 
-**3. Generate Cryptographic Keys**
+**3. Generate cryptographic keys**
 
-You need to generate unique keys and IDs. You can do this on any machine with Docker or natively installed tools.
-
-*Generate 3 UUIDs (for Entry, Transit, and Exit nodes):*
+*3 UUIDs (for Entry, Transit, and Exit nodes):*
 ```bash
 uuidgen
-# or
-cat /proc/sys/kernel/random/uuid
 ```
 
-*Generate 2 REALITY Key Pairs (Entry->Transit and Transit->Exit):*
+*2 REALITY key pairs (Entry↔Transit and Transit↔Exit):*
 ```bash
-# Using Docker (no local Xray installation required)
 docker run --rm teddysun/xray xray x25519
 ```
 
-*Generate 2 Short IDs (SID):*
+*2 Short IDs:*
 ```bash
 openssl rand -hex 8
 ```
 
-**4. Apply Your Data**
+Fill in `group_vars/matryoshka/xray.yml` with the generated values.
 
-Open `group_vars/matryoshka/xray.yml` and carefully fill in the variables with your newly generated UUIDs, Keys, and SIDs.
-
-**5. Apply the Inventory**
-
-Copy the example inventory file to the root directory:
+**4. Configure inventory**
 
 ```bash
 cp inventory.ini.example inventory.ini
 ```
 
-Open `inventory.ini` and carefully fill in `ansible_host` with your ip addresses.
+Fill in `ansible_host` with your server IP addresses.
 
-**6. Run the Playbook**
+**5. Deploy**
 
-Deploy the infrastructure by running:
 ```bash
 ansible-playbook -i inventory.ini matryoshka.yml
 ```
 
-## 📜 **License**
+## 📬 Subscription
+
+Client connection links are delivered via a **secret GitHub Gist** — HTTPS by default, no extra infrastructure required.
+
+**Setup (one time):**
+
+1. Create a secret Gist at [gist.github.com](https://gist.github.com) with a single file named `sub.txt`.
+2. Copy the Gist ID from the URL: `gist.github.com/{user}/{ID}`.
+3. Create a GitHub Personal Access Token with only the `gist` scope:
+   GitHub → Settings → Developer settings → Personal access tokens.
+4. Configure the subscription variables:
+
+```bash
+cp examples/gist.yml group_vars/matryoshka/gist.yml
+```
+
+Fill in `group_vars/matryoshka/gist.yml` with your token, gist ID, and username. This file is gitignored — never commit real values.
+
+**How it works:**
+
+The `update-subscription` role pushes the current VLESS link (base64-encoded) to your Gist via the GitHub API. Clients that have the raw Gist URL as a subscription source receive the update automatically on their next refresh.
+
+Subscription URL format:
+```
+https://gist.githubusercontent.com/{user}/{gist_id}/raw/sub.txt
+```
+
+To run only the subscription update without redeploying servers:
+```bash
+ansible-playbook -i inventory.ini subscription.yml
+```
+
+## 📜 License
 
 MIT — see [LICENSE](LICENSE)
 
-## 🛡️ **Disclaimer**
+## 🛡️ Disclaimer
 
 This project is provided for educational, testing, and private infrastructure management purposes only. Use at your own risk. Respect the terms of service of your hosting providers and the laws of your jurisdiction.

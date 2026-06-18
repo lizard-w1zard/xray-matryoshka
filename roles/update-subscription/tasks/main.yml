@@ -1,0 +1,22 @@
+---
+
+- name: Push subscription to GitHub Gist
+  ansible.builtin.uri:
+    url: "https://api.github.com/gists/{{ github_gist_id }}"
+    method: PATCH
+    headers:
+      Authorization: "Bearer {{ github_gist_token }}"
+      Accept: "application/vnd.github+json"
+      X-GitHub-Api-Version: "2022-11-28"
+    body_format: json
+    body:
+      files:
+        sub.txt:
+          content: "{{ xray_entry_vless_link | b64encode }}"
+    status_code: 200
+  delegate_to: localhost
+
+- name: Print subscription URL
+  ansible.builtin.debug:
+    msg: "Subscription URL: https://gist.githubusercontent.com/{{ github_gist_user }}/{{ github_gist_id }}/raw/sub.txt"
+  delegate_to: localhost
