@@ -5,7 +5,7 @@
   remote_user: root
   gather_facts: true
   roles:
-    - { role: enroll-system }
-    - { role: install-docker }
-    - { role: enable-bbr }
+    #- { role: enroll-system }
+    #- { role: install-docker }
+    #- { role: enable-bbr }
     - { role: configure-xray }
