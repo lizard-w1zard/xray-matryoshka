@@ -1,11 +1,11 @@
 services:
   xray:
-    image: teddysun/xray:latest
+    image: teddysun/xray:26.6.1
     container_name: xray
     restart: unless-stopped
-    ports:
-      - "443:443"
+    network_mode: "host"
     volumes:
       - /etc/xray/config.json:/etc/xray/config.json:ro
       - /etc/xray/geoip.dat:/usr/local/share/xray/geoip.dat:ro
       - /etc/xray/geosite.dat:/usr/local/share/xray/geosite.dat:ro
+      - /var/log/xray:/var/log/xray

@@ -1,9 +1,38 @@
 {
   "log": {
+    "access": "/var/log/xray/access.log",
+    "error": "/var/log/xray/error.log",
     "loglevel": "warning"
+  },
+  "stats": {},
+  "api": {
+    "tag": "api",
+    "services": [
+      "StatsService"
+    ]
+  },
+  "policy": {
+    "levels": {
+      "0": {
+        "handshake": 4,
+        "connIdle": 120,
+        "uplinkOnly": 2,
+        "downlinkOnly": 2,
+        "bufferSize": 10240,
+        "statsUserUplink": true,
+        "statsUserDownlink": true
+      }
+    },
+    "system": {
+      "statsInboundUplink": true,
+      "statsInboundDownlink": true,
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
   },
   "inbounds": [
     {
+      "tag": "main",
       "listen": "0.0.0.0",
       "port": 443,
       "protocol": "vless",
@@ -11,7 +40,8 @@
         "clients": [
           {
             "id": "{{ xray_entry_uuid }}",
-            "flow": ""
+            "flow": "",
+            "email": "all_users"
           }
         ],
         "decryption": "none"
@@ -22,9 +52,13 @@
         "realitySettings": {
           "show": false,
           "dest": "{{ xray_entry_dest }}:443",
-          "serverNames": ["{{ xray_entry_dest }}"],
+          "serverNames": [
+            "{{ xray_entry_dest }}"
+          ],
           "privateKey": "{{ xray_entry_private_key }}",
-          "shortIds": ["{{ xray_entry_short_id }}"]
+          "shortIds": [
+            "{{ xray_entry_short_id }}"
+          ]
         },
         "grpcSettings": {
           "serviceName": "grpc"
@@ -32,7 +66,20 @@
       },
       "sniffing": {
         "enabled": true,
-        "destOverride": ["http", "tls", "quic"]
+        "destOverride": [
+          "http",
+          "tls",
+          "quic"
+        ]
+      }
+    },
+    {
+      "tag": "api",
+      "listen": "127.0.0.1",
+      "port": 54321,
+      "protocol": "dokodemo-door",
+      "settings": {
+        "address": "127.0.0.1"
       }
     }
   ],
@@ -66,7 +113,9 @@
           "spiderX": "/"
         },
         "grpcSettings": {
-          "serviceName": "grpc"
+          "serviceName": "grpc",
+          "idle_timeout": 60,
+          "health_check_timeout": 15
         }
       }
     },
@@ -86,26 +135,39 @@
     "rules": [
       {
         "type": "field",
-        "protocol": ["quic"],
+        "inboundTag": [
+          "api"
+        ],
+        "outboundTag": "api"
+      },
+      {
+        "type": "field",
+        "protocol": [
+          "quic"
+        ],
         "outboundTag": "blocked"
       },
       {
         "type": "field",
-        "ip": ["geoip:private"],
+        "ip": [
+          "geoip:private"
+        ],
         "outboundTag": "blocked"
       },
       {
         "type": "field",
         "domain": [
-          "domain:ru", 
-          "domain:рф", 
+          "domain:ru",
+          "domain:рф",
           "domain:su"
         ],
         "outboundTag": "direct"
       },
       {
         "type": "field",
-        "ip": ["geoip:ru"],
+        "ip": [
+          "geoip:ru"
+        ],
         "outboundTag": "direct"
       }
     ]
