@@ -1,0 +1,20 @@
+global
+    maxconn 10000
+
+defaults
+    mode tcp
+    timeout connect 5s
+    timeout client 30s
+    timeout server 30s
+
+frontend xray_frontend
+    bind 0.0.0.0:443
+    
+    # stick-table type ip size 10m expire 30s store conn_cnt
+    
+    # tcp-request connection reject if { src_conn_cnt gt 25 }
+    
+    default_backend xray_backend
+
+backend xray_backend
+    server xray_node 127.0.0.1:4443

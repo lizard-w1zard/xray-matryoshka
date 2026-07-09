@@ -14,11 +14,6 @@
   "policy": {
     "levels": {
       "0": {
-        "handshake": 4,
-        "connIdle": 120,
-        "uplinkOnly": 2,
-        "downlinkOnly": 2,
-        "bufferSize": 10240,
         "statsUserUplink": true,
         "statsUserDownlink": true
       }
@@ -33,8 +28,8 @@
   "inbounds": [
     {
       "tag": "main",
-      "listen": "0.0.0.0",
-      "port": 443,
+      "listen": "127.0.0.1",
+      "port": 4443,
       "protocol": "vless",
       "settings": {
         "clients": [

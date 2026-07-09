@@ -1,0 +1,8 @@
+services:
+  xray-haproxy:
+    image: haproxy:3.4-alpine
+    container_name: xray-haproxy
+    user: root
+    network_mode: "host"
+    volumes:
+      - /etc/haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro

@@ -1,0 +1,28 @@
+---
+
+- name: Ensure HAProxy directory exists
+  ansible.builtin.file:
+    path: "/etc/haproxy"
+    state: directory
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: Deploy HAProxy config
+  ansible.builtin.template:
+    src: "etc/haproxy/haproxy.cfg.j2"
+    dest: "/etc/haproxy/haproxy.cfg"
+    mode: "0644"
+  notify: Restart haproxy
+
+- name: Copy docker-compose for HAProxy
+  ansible.builtin.template:
+    src: opt/haproxy-compose.yml.j2
+    dest: /opt/haproxy-compose.yml
+
+- name: Start HAProxy via Docker Compose V2
+  community.docker.docker_compose_v2:
+    project_src: /opt
+    files:
+      - haproxy-compose.yml
+    state: present
