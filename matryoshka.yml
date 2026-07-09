@@ -15,4 +15,4 @@
   remote_user: root
   gather_facts: true
   roles:
-    - { role: configure-puller }
+    - { role: configure-pooler }
