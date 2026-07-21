@@ -9,16 +9,22 @@
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
+        "sockopt": {
+          "trustedXForwardedFor": [
+            "{{ hostvars['entry']['ansible_host'] }}"
+          ]
+        },
         "security": "reality",
         "realitySettings": {
-          "dest": "{{ xray_transit_dest }}:443",
+          "target": "{{ xray_transit_dest }}:443", 
           "serverNames": ["{{ xray_transit_dest }}"],
           "privateKey": "{{ xray_entry_private_key }}",
-          "shortIds": ["{{ xray_entry_short_id }}"]
+          "shortIds": ["{{ xray_entry_short_id }}"],
+          "mldsa65Seed": "{{ xray_transit_mldsa_seed }}"
         },
-        "grpcSettings": {
-          "serviceName": "grpc"
+        "xhttpSettings": {
+          "path": "/{{ xray_transit_xhttp_path | default('transit-stream') }}"
         }
       }
     }
@@ -43,17 +49,18 @@
         ]
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
           "serverName": "{{ xray_exit_dest }}",
           "publicKey": "{{ xray_exit_public_key }}",
           "shortId": "{{ xray_exit_short_id }}",
-          "spiderX": "/"
+          "spiderX": "/",
+          "mldsa65Verify": "{{ xray_exit_mldsa_public }}"
         },
-        "grpcSettings": {
-          "serviceName": "grpc"
+        "xhttpSettings": {
+          "path": "/{{ xray_exit_xhttp_path | default('exit-stream') }}"
         }
       }
     }

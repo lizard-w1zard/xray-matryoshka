@@ -16,7 +16,7 @@ It leverages the REALITY protocol to obfuscate server-to-server communication, e
 
 ✅ **3-Node Cascaded Routing:** Entry → Transit → Exit segmented traffic flow.
 
-✅ **HAProxy connection pooler** The Entry node has its own connection pooler for flexible connection serving.
+✅ **HAProxy connection pooler:** The Entry node has its own connection pooler for flexible connection serving.
 
 ✅ **Xray (VLESS + REALITY + gRPC):** Secure, obfuscated tunnels with HTTP/2 multiplexing — one TLS handshake per session instead of one per browser connection.
 

@@ -9,16 +9,22 @@
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
+        "sockopt": {
+          "trustedXForwardedFor": [
+            "{{ hostvars['transit']['ansible_host'] }}"
+          ]
+        },
         "security": "reality",
         "realitySettings": {
-          "dest": "{{ xray_exit_dest }}:443",
+          "target": "{{ xray_exit_dest }}:443",
           "serverNames": ["{{ xray_exit_dest }}"],
           "privateKey": "{{ xray_exit_private_key }}",
-          "shortIds": ["{{ xray_exit_short_id }}"]
+          "shortIds": ["{{ xray_exit_short_id }}"],
+          "mldsa65Seed": "{{ xray_exit_mldsa_seed }}"
         },
-        "grpcSettings": {
-          "serviceName": "grpc"
+        "xhttpSettings": {
+          "path": "/{{ xray_exit_xhttp_path | default('exit-stream') }}"
         }
       }
     }

@@ -17,4 +17,4 @@ frontend xray_frontend
     default_backend xray_backend
 
 backend xray_backend
-    server xray_node 127.0.0.1:4443
+    server xray_node 127.0.0.1:4443 send-proxy-v2 check

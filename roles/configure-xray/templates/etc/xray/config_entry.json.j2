@@ -31,6 +31,7 @@
       "listen": "127.0.0.1",
       "port": 4443,
       "protocol": "vless",
+      "acceptProxyProtocol": true,
       "settings": {
         "clients": [
           {
@@ -42,21 +43,28 @@
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
+        "sockopt": {
+          "acceptProxyProtocol": true,
+          "trustedXForwardedFor": [
+            "X-Forwarded-For"
+          ]
+        },
         "security": "reality",
         "realitySettings": {
           "show": false,
-          "dest": "{{ xray_entry_dest }}:443",
+          "target": "{{ xray_entry_dest }}:443",
           "serverNames": [
             "{{ xray_entry_dest }}"
           ],
           "privateKey": "{{ xray_entry_private_key }}",
           "shortIds": [
             "{{ xray_entry_short_id }}"
-          ]
+          ],
+          "mldsa65Seed": "{{ xray_entry_mldsa_seed }}"
         },
-        "grpcSettings": {
-          "serviceName": "grpc"
+        "xhttpSettings": {
+          "path": "/{{ xray_entry_xhttp_path | default('entry-stream') }}"
         }
       },
       "sniffing": {
@@ -98,19 +106,18 @@
         ]
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
           "serverName": "{{ xray_transit_dest }}",
           "publicKey": "{{ xray_entry_public_key }}",
           "shortId": "{{ xray_entry_short_id }}",
-          "spiderX": "/"
+          "spiderX": "/",
+          "mldsa65Verify": "{{ xray_transit_mldsa_public }}"
         },
-        "grpcSettings": {
-          "serviceName": "grpc",
-          "idle_timeout": 60,
-          "health_check_timeout": 15
+        "xhttpSettings": {
+          "path": "/{{ xray_transit_xhttp_path | default('transit-stream') }}"
         }
       }
     },
