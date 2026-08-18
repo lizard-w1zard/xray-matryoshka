@@ -57,7 +57,7 @@
         },
         "xhttpSettings": {
           "path": "/{{ xray_entry_xhttp_path | default('entry-stream') }}",
-          "mode": "auto"
+          "mode": "stream-one"
         }
       },
       "sniffing": {
@@ -110,7 +110,7 @@
         },
         "xhttpSettings": {
           "path": "/{{ xray_transit_xhttp_path | default('transit-stream') }}",
-          "mode": "auto"
+          "mode": "stream-one"
         }
       }
     },
