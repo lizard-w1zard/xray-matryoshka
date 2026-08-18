@@ -35,14 +35,14 @@
         "clients": [
           {
             "id": "{{ xray_entry_uuid }}",
-            "flow": "xtls-rprx-vision",
+            "flow": "",
             "email": "all_users"
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "show": false,
@@ -54,6 +54,9 @@
           "shortIds": [
             "{{ xray_entry_short_id }}"
           ]
+        },
+        "grpcSettings": {
+          "serviceName": "grpc"
         }
       },
       "sniffing": {
@@ -96,7 +99,7 @@
         ]
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
@@ -105,6 +108,9 @@
           "shortId": "{{ xray_transit_short_id }}",
           "spiderX": "/"
         }
+      },
+      "grpcSettings": {
+        "serviceName": "grpc"
       }
     },
     {

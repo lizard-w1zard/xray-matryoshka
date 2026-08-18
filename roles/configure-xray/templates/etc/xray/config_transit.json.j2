@@ -9,7 +9,7 @@
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "tcp",
+        "network": "grpc",
         "security": "reality",
         "realitySettings": {
           "dest": "{{ xray_transit_dest }}:443",
@@ -17,6 +17,9 @@
           "privateKey": "{{ xray_transit_private_key }}",
           "shortIds": ["{{ xray_transit_short_id }}"]
         }
+      },
+      "grpcSettings": {
+        "serviceName": "grpc"
       }
     }
   ],
