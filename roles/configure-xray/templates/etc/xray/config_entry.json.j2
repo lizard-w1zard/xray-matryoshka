@@ -2,7 +2,7 @@
   "log": {
     "access": "/var/log/xray/access.log",
     "error": "/var/log/xray/error.log",
-    "loglevel": "debug"
+    "loglevel": "warning"
   },
   "stats": {},
   "api": {
@@ -35,14 +35,14 @@
         "clients": [
           {
             "id": "{{ xray_entry_uuid }}",
-            "flow": "",
+            "flow": "xtls-rprx-vision",
             "email": "all_users"
           }
         ],
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
         "realitySettings": {
           "show": false,
@@ -54,10 +54,6 @@
           "shortIds": [
             "{{ xray_entry_short_id }}"
           ]
-        },
-        "xhttpSettings": {
-          "path": "/{{ xray_entry_xhttp_path | default('entry-stream') }}",
-          "mode": "stream-one"
         }
       },
       "sniffing": {
@@ -66,7 +62,8 @@
           "http",
           "tls",
           "quic"
-        ]
+        ],
+        "routeOnly": true
       }
     },
     {
@@ -99,7 +96,7 @@
         ]
       },
       "streamSettings": {
-        "network": "xhttp",
+        "network": "tcp",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
@@ -107,10 +104,6 @@
           "publicKey": "{{ xray_transit_public_key }}",
           "shortId": "{{ xray_transit_short_id }}",
           "spiderX": "/"
-        },
-        "xhttpSettings": {
-          "path": "/{{ xray_transit_xhttp_path | default('transit-stream') }}",
-          "mode": "stream-one"
         }
       }
     },
