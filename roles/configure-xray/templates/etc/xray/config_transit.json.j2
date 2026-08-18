@@ -14,8 +14,8 @@
         "realitySettings": {
           "dest": "{{ xray_transit_dest }}:443",
           "serverNames": ["{{ xray_transit_dest }}"],
-          "privateKey": "{{ xray_entry_private_key }}",
-          "shortIds": ["{{ xray_entry_short_id }}"]
+          "privateKey": "{{ xray_transit_private_key }}",
+          "shortIds": ["{{ xray_transit_short_id }}"]
         },
         "grpcSettings": {
           "serviceName": "grpc"

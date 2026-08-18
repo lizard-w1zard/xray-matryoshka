@@ -11,7 +11,6 @@ xray_entry_host: "1.2.3.4"   # Public IP of your Entry node
 # ==========================================
 xray_entry_dest: "www.rambler.ru"       # Masking domain for Entry node (RU, low latency)
 xray_transit_dest: "www.cloudflare.com" # Masking domain for Transit node
-xray_exit_dest: "www.netflix.com"       # Masking domain for Exit node
 
 # ==========================================
 # Client UUIDs for VLESS authentication
@@ -28,15 +27,15 @@ xray_exit_uuid: 804fb5a7-1027-4dd4-96e2-faa3b35ac068
 xray_entry_private_key: ZZq4OAdut0Rp3wd09LhUMMwNwfeQx3LtiTX6p9jD4JF
 xray_entry_public_key: a9nBay8Zqs2C0YLNqs1a9yLmf6qzKgiiRbPXMpFpC8H
 
-xray_exit_private_key: HR096EOwQoyoErtHo0UccvNHHH8ZYVyGSY03WK6aURF
-xray_exit_public_key: tj7bwWQc4tQwc5iUM0yFayeOiPmkD2VvPNK9MP7Qqgm
+xray_transit_private_key: HR096EOwQoyoErtHo0UccvNHHH8ZYVyGSY03WK6aURF
+xray_transit_public_key: tj7bwWQc4tQwc5iUM0yFayeOiPmkD2VvPNK9MP7Qqgm
 
 # ==========================================
 # REALITY Short IDs
 # Generate: openssl rand -hex 8
 # ==========================================
 xray_entry_short_id: ce3b334702d898ff
-xray_exit_short_id: a4c0add371567212
+xray_transit_short_id: a4c0add371567212
 
 # ==========================================
 # Client subscription link (auto-assembled from variables above)
