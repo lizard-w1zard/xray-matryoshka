@@ -42,7 +42,7 @@
         "decryption": "none"
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
         "security": "reality",
         "realitySettings": {
           "show": false,
@@ -55,8 +55,9 @@
             "{{ xray_entry_short_id }}"
           ]
         },
-        "grpcSettings": {
-          "serviceName": "grpc"
+        "xhttpSettings": {
+          "path": "/{{ xray_entry_xhttp_path | default('entry-stream') }}",
+          "mode": "auto"
         }
       },
       "sniffing": {
@@ -80,7 +81,7 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy_to_germany",
+      "tag": "forward_to_transit",
       "protocol": "vless",
       "settings": {
         "vnext": [
@@ -98,7 +99,7 @@
         ]
       },
       "streamSettings": {
-        "network": "grpc",
+        "network": "xhttp",
         "security": "reality",
         "realitySettings": {
           "fingerprint": "chrome",
@@ -107,10 +108,9 @@
           "shortId": "{{ xray_transit_short_id }}",
           "spiderX": "/"
         },
-        "grpcSettings": {
-          "serviceName": "grpc",
-          "idle_timeout": 60,
-          "health_check_timeout": 15
+        "xhttpSettings": {
+          "path": "/{{ xray_transit_xhttp_path | default('transit-stream') }}",
+          "mode": "auto"
         }
       }
     },
