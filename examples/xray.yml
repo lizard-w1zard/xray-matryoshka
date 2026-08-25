@@ -42,3 +42,43 @@ xray_transit_short_id: a4c0add371567212
 # Pushed to GitHub Gist on every deploy — do not edit manually
 # ==========================================
 xray_entry_vless_link: "vless://{{ xray_entry_uuid }}@{{ xray_entry_host }}:443?encryption=none&type=grpc&serviceName=grpc&security=reality&pbk={{ xray_entry_public_key }}&fp=chrome&sni={{ xray_entry_dest }}&sid={{ xray_entry_short_id }}#Matryoshka"
+
+# ==========================================
+# Cloudflare WARP Credentials
+# Used on Exit node for selective routing
+# Generate: wgcf register && wgcf generate (values from wgcf-profile.conf)
+# ==========================================
+
+# WireGuard Private Key (32-byte base64)
+xray_warp_private_key: "iexuC>aeBie3aiVee2eenowahKici!edaim8aekai8ee"
+
+# Internal IPv4 assigned by Cloudflare (usually 172.16.0.2/32)
+xray_warp_ipv4: "172.16.0.2/32"
+
+# Unique IPv6 assigned to your WARP account
+xray_warp_ipv6: "2606:4700:110:84ef:19b2:940a:612f:98ab/128"
+
+# Client ID bytes for Cloudflare routing (default: [0, 0, 0] or decoded client_id from API)
+xray_warp_reserved: "[0, 0, 0]"
+
+# List of domains/categories routed via WARP (supports domain:, full:, geosite:)
+xray_warp_domains:
+  - "domain:openai.com"
+  - "domain:claude.ai"
+
+# ==========================================
+# GitHub Gist Subscription
+# This file is gitignored — never commit real values
+# ==========================================
+
+# GitHub Personal Access Token with `gist` scope only
+# Generate: GitHub → Settings → Developer settings → Personal access tokens → Fine-grained
+github_gist_token: "github_pat_XXXXXXXXXXXXXXXXXXXXXXXX"
+
+# Gist ID from the URL: gist.github.com/{user}/{ID}
+# Create a secret gist manually at gist.github.com with a file named sub.txt
+# Generate: openssl rand -hex 32 (use as a throwaway initial content)
+github_gist_id: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
+
+# Your GitHub username
+github_gist_user: "your-username"
