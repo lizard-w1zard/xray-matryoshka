@@ -26,12 +26,14 @@ It leverages the REALITY protocol to obfuscate server-to-server communication, e
 
 ✅ **GitHub Gist Subscription:** Client connection links are automatically pushed to a secret GitHub Gist on every deploy. Add the URL once to any client — updates propagate automatically.
 
+✅ **Selective Cloudflare WARP Outbound:** Route specific blocked or geo-restricted services (e.g., OpenAI, Netflix, Spotify, DeFi apps) through Cloudflare WARP on the Exit node, while keeping the rest of the traffic direct.
+
 ## 📦 Requirements
 
 - Control machine with **Ansible** installed.
 - 3 target servers running **Debian/Ubuntu**.
 - **Root SSH access** to all target servers.
-- **GitHub account** for subscription delivery.
+- **GitHub account** for subscription delivery. (optional)
 
 ## 🔑 Prerequisite: SSH Key Setup
 
@@ -72,6 +74,21 @@ docker run --rm teddysun/xray xray x25519
 openssl rand -hex 8
 ```
 
+*Cloudflare WARP credentials:*
+```bash
+# Install wgcf (Cloudflare WARP CLI)
+curl -fsSL git.io/wgcf.sh | sudo bash
+
+# Register and generate profile
+wgcf register --accept-tos
+wgcf generate
+```
+
+*Extract the values from the generated `wgcf-profile.conf` file:*
+- `PrivateKey` ➔ `xray_warp_private_key`
+- `Address` (IPv4) ➔ `xray_warp_ipv4`
+- `Address` (IPv6) ➔ `xray_warp_ipv6`
+
 Fill in `group_vars/matryoshka/xray.yml` with the generated values.
 
 **4. Configure inventory**
@@ -98,13 +115,9 @@ Client connection links are delivered via a **secret GitHub Gist** — HTTPS by 
 2. Copy the Gist ID from the URL: `gist.github.com/{user}/{ID}`.
 3. Create a GitHub Personal Access Token with only the `gist` scope:
    GitHub → Settings → Developer settings → Personal access tokens.
-4. Configure the subscription variables:
+4. Configure the subscription variables
 
-```bash
-cp examples/gist.yml group_vars/matryoshka/gist.yml
-```
-
-Fill in `group_vars/matryoshka/gist.yml` with your token, gist ID, and username. This file is gitignored — never commit real values.
+Fill in `group_vars/matryoshka/xray.yml` with your token, gist ID, and username in the related section. This file is gitignored — never commit real values.
 
 **How it works:**
 
