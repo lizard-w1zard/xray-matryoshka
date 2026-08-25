@@ -17,7 +17,7 @@ Automated Ansible deployment for a 3-node cascaded Xray proxy (`Entry` ➔ `Tran
 ### 2. Setup Config & Inventory
 
 ```bash
-git clone [https://github.com/your-username/xray-matryoshka.git](https://github.com/your-username/xray-matryoshka.git) && cd xray-matryoshka
+git clone https://github.com/your-username/xray-matryoshka.git && cd xray-matryoshka
 cp examples/xray.yml group_vars/matryoshka/xray.yml
 cp inventory.ini.example inventory.ini
 ```
@@ -49,10 +49,7 @@ cat wgcf-profile.conf
 ansible-playbook -i inventory.ini matryoshka.yml
 ```
 
----
-
-<details>
-<summary><b>📬 Optional: GitHub Gist Subscription Setup</b></summary>
+## 📬 Optional: GitHub Gist Subscription Setup
 
 1. Create a secret Gist at [gist.github.com](https://gist.github.com) with a file named `sub.txt`.
 2. Generate a GitHub PAT (Fine-grained) with `gist` scope.
@@ -61,12 +58,10 @@ ansible-playbook -i inventory.ini matryoshka.yml
    `https://gist.githubusercontent.com/{user}/{gist_id}/raw/sub.txt`
 
 To update the subscription link only:
+
 ```bash
 ansible-playbook -i inventory.ini subscription.yml
 ```
-</details>
-
----
 
 ## 📜 License
 
