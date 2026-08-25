@@ -1,142 +1,73 @@
 # xray-matryoshka
 
-Automated Ansible deployment for a multi-node Xray proxy cascade (VLESS+REALITY).
+Automated Ansible deployment for a 3-node cascaded Xray proxy (`Entry` ➔ `Transit` ➔ `Exit`) with VLESS + REALITY.
 
-Sets up a secure Entry→Transit→Exit routing scheme with gRPC transport to protect against DPI-based connection counting.
+## ✨ Highlights
 
-No TLS certificates or domains required. Perfect for maintaining stable and private self-hosted infrastructure.
-
-## 📌 About
-
-This project automates the deployment of a 3-node network topology (Entry ➔ Transit ➔ Exit) using [Xray-core](https://github.com/XTLS/Xray-core) under the hood.
-
-It leverages the REALITY protocol to obfuscate server-to-server communication, ensuring high resilience and data privacy across your infrastructure without the need for external domains.
-
-## ✨ Features
-
-✅ **3-Node Cascaded Routing:** Entry → Transit → Exit segmented traffic flow.
-
-✅ **HAProxy connection pooler** The Entry node has its own connection pooler for flexible connection serving.
-
-✅ **Xray (VLESS + REALITY + gRPC):** Secure, obfuscated tunnels with HTTP/2 multiplexing — one TLS handshake per session instead of one per browser connection.
-
-✅ **Fully Automated:** Deploy to multiple servers in minutes via Ansible.
-
-✅ **Domainless:** No TLS certificates or registered domains required.
-
-✅ **GitHub Gist Subscription:** Client connection links are automatically pushed to a secret GitHub Gist on every deploy. Add the URL once to any client — updates propagate automatically.
-
-✅ **Selective Cloudflare WARP Outbound:** Route specific blocked or geo-restricted services (e.g., OpenAI, Netflix, Spotify, DeFi apps) through Cloudflare WARP on the Exit node, while keeping the rest of the traffic direct.
-
-## 📦 Requirements
-
-- Control machine with **Ansible** installed.
-- 3 target servers running **Debian/Ubuntu**.
-- **Root SSH access** to all target servers.
-- **GitHub account** for subscription delivery. (optional)
-
-## 🔑 Prerequisite: SSH Key Setup
-
-Before running the playbook, your control machine's public SSH key must be added to the `~/.ssh/authorized_keys` file of the `root` user on all three target servers.
-
-> *If you are new to SSH keys, follow this simple public guide:*
-> [**How to Set Up SSH Keys (DigitalOcean)**](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2)
+- **3-Node Cascade:** Obfuscated inter-server communication, domainless (no TLS certs needed).
+- **Selective WARP Outbound:** Route specific AI / geo-restricted services via Cloudflare WARP on the Exit node.
+- **Auto Subscription:** Automatic sync of base64 VLESS links to a secret GitHub Gist.
 
 ## 🚀 Quick Start
 
-**1. Clone the repository**
+### 1. Requirements
+- 3 Debian/Ubuntu servers with root SSH key access.
+- Ansible installed on your control machine.
+
+### 2. Setup Config & Inventory
 
 ```bash
-git clone https://github.com/your-username/xray-matryoshka.git
-cd xray-matryoshka
-```
-
-**2. Configure Xray variables**
-
-```bash
+git clone [https://github.com/your-username/xray-matryoshka.git](https://github.com/your-username/xray-matryoshka.git) && cd xray-matryoshka
 cp examples/xray.yml group_vars/matryoshka/xray.yml
+cp inventory.ini.example inventory.ini
 ```
 
-**3. Generate cryptographic keys**
+### 3. Generate Keys & Fill `group_vars/matryoshka/xray.yml`
 
-*3 UUIDs (for Entry, Transit, and Exit nodes):*
 ```bash
+# 3x UUIDs (Entry, Transit, Exit)
 uuidgen
-```
 
-*2 REALITY key pairs (Entry↔Transit and Transit↔Exit):*
-```bash
+# 2x REALITY Key Pairs (Entry, Transit)
 docker run --rm teddysun/xray xray x25519
-```
 
-*2 Short IDs:*
-```bash
+# 2x Short IDs
 openssl rand -hex 8
-```
 
-*Cloudflare WARP credentials:*
-```bash
 # Install wgcf (Cloudflare WARP CLI)
 curl -fsSL git.io/wgcf.sh | sudo bash
 
 # Register and generate profile
 wgcf register --accept-tos
 wgcf generate
+cat wgcf-profile.conf
 ```
 
-*Extract the values from the generated `wgcf-profile.conf` file:*
-- `PrivateKey` ➔ `xray_warp_private_key`
-- `Address` (IPv4) ➔ `xray_warp_ipv4`
-- `Address` (IPv6) ➔ `xray_warp_ipv6`
-
-Fill in `group_vars/matryoshka/xray.yml` with the generated values.
-
-**4. Configure inventory**
-
-```bash
-cp inventory.ini.example inventory.ini
-```
-
-Fill in `ansible_host` with your server IP addresses.
-
-**5. Deploy**
+### 4. Deploy
 
 ```bash
 ansible-playbook -i inventory.ini matryoshka.yml
 ```
 
-## 📬 Subscription
+---
 
-Client connection links are delivered via a **secret GitHub Gist** — HTTPS by default, no extra infrastructure required.
+<details>
+<summary><b>📬 Optional: GitHub Gist Subscription Setup</b></summary>
 
-**Setup (one time):**
+1. Create a secret Gist at [gist.github.com](https://gist.github.com) with a file named `sub.txt`.
+2. Generate a GitHub PAT (Fine-grained) with `gist` scope.
+3. Fill `github_gist_token`, `github_gist_id`, and `github_gist_user` in `xray.yml`.
+4. Subscription URL format for clients:
+   `https://gist.githubusercontent.com/{user}/{gist_id}/raw/sub.txt`
 
-1. Create a secret Gist at [gist.github.com](https://gist.github.com) with a single file named `sub.txt`.
-2. Copy the Gist ID from the URL: `gist.github.com/{user}/{ID}`.
-3. Create a GitHub Personal Access Token with only the `gist` scope:
-   GitHub → Settings → Developer settings → Personal access tokens.
-4. Configure the subscription variables
-
-Fill in `group_vars/matryoshka/xray.yml` with your token, gist ID, and username in the related section. This file is gitignored — never commit real values.
-
-**How it works:**
-
-The `update-subscription` role pushes the current VLESS link (base64-encoded) to your Gist via the GitHub API. Clients that have the raw Gist URL as a subscription source receive the update automatically on their next refresh.
-
-Subscription URL format:
-```
-https://gist.githubusercontent.com/{user}/{gist_id}/raw/sub.txt
-```
-
-To run only the subscription update without redeploying servers:
+To update the subscription link only:
 ```bash
 ansible-playbook -i inventory.ini subscription.yml
 ```
+</details>
+
+---
 
 ## 📜 License
 
 MIT — see [LICENSE](LICENSE)
-
-## 🛡️ Disclaimer
-
-This project is provided for educational, testing, and private infrastructure management purposes only. Use at your own risk. Respect the terms of service of your hosting providers and the laws of your jurisdiction.
