@@ -14,12 +14,12 @@
         "realitySettings": {
           "dest": "{{ xray_transit_dest }}:443",
           "serverNames": ["{{ xray_transit_dest }}"],
-          "privateKey": "{{ xray_entry_private_key }}",
-          "shortIds": ["{{ xray_entry_short_id }}"]
-        },
-        "grpcSettings": {
-          "serviceName": "grpc"
+          "privateKey": "{{ xray_transit_private_key }}",
+          "shortIds": ["{{ xray_transit_short_id }}"]
         }
+      },
+      "grpcSettings": {
+        "serviceName": "grpc"
       }
     }
   ],
@@ -43,18 +43,8 @@
         ]
       },
       "streamSettings": {
-        "network": "grpc",
-        "security": "reality",
-        "realitySettings": {
-          "fingerprint": "chrome",
-          "serverName": "{{ xray_exit_dest }}",
-          "publicKey": "{{ xray_exit_public_key }}",
-          "shortId": "{{ xray_exit_short_id }}",
-          "spiderX": "/"
-        },
-        "grpcSettings": {
-          "serviceName": "grpc"
-        }
+        "network": "tcp",
+        "security": "none"
       }
     }
   ]

@@ -65,7 +65,8 @@
           "http",
           "tls",
           "quic"
-        ]
+        ],
+        "routeOnly": true
       }
     },
     {
@@ -80,7 +81,7 @@
   ],
   "outbounds": [
     {
-      "tag": "proxy_to_germany",
+      "tag": "forward_to_transit",
       "protocol": "vless",
       "settings": {
         "vnext": [
@@ -103,15 +104,13 @@
         "realitySettings": {
           "fingerprint": "chrome",
           "serverName": "{{ xray_transit_dest }}",
-          "publicKey": "{{ xray_entry_public_key }}",
-          "shortId": "{{ xray_entry_short_id }}",
+          "publicKey": "{{ xray_transit_public_key }}",
+          "shortId": "{{ xray_transit_short_id }}",
           "spiderX": "/"
-        },
-        "grpcSettings": {
-          "serviceName": "grpc",
-          "idle_timeout": 60,
-          "health_check_timeout": 15
         }
+      },
+      "grpcSettings": {
+        "serviceName": "grpc"
       }
     },
     {

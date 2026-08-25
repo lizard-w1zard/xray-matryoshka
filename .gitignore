@@ -1,3 +1,2 @@
 inventory.ini
-group_vars/matryoshka/xray.yml
-group_vars/matryoshka/gist.yml
+group_vars/matryoshka/*.yml
